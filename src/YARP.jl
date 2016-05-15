@@ -11,6 +11,28 @@ export newstring, stringtoc, stringfromc, bottlestring
 const LIBYARP="libyarpc"
 include("YARP_h.jl")
 
+function encode(msg::AbstractString)
+    a = '\0'
+    b = '\0'
+    c = '\0'
+    d = '\0'
+    l = length(msg)
+    if l >= 1
+        a = msg[1]
+        if l >= 2
+            b = msg[2]
+            if l >= 3
+                c = msg[3]
+                if l >= 4
+                    d = msg[4]
+                end
+            end
+        end
+    end
+    Int(d) << 24 + Int(c) << 16 + Int(b) << 8 + Int(a)
+end
+
+
 "
     newnet()
 
