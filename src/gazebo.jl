@@ -2,10 +2,6 @@ module gazebo
 
 using YARP
 
-type Robot
-    address::AbstractString
-end
-
 "Helper for text bottle creation"
 function newbottle(msg::AbstractString)
     bottle = YARP.portableStruct()
