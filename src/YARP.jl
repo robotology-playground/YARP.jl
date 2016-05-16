@@ -5,6 +5,7 @@ export newport, opennewport, openport, openexport, freeport, closeport
 export newcontact, setcontactname, freecontact
 export setlocalmode
 export connectnet, readport, writeport, writewreplyport
+export bottleinit
 export addstring, addint, adddouble
 export newstring, stringtoc, stringfromc, bottlestring
 
@@ -228,8 +229,8 @@ end
 
 "Overload of bottleinit"
 function bottleinit()
-    bottle = YARP.portableStruct()
-    YARP.bottleinit(bottle)
+    bottle = portableStruct()
+    bottleinit(bottle)
     bottle
 end
 

@@ -9,7 +9,7 @@ end
 "Helper for text bottle creation"
 function newbottle(msg::AbstractString)
     bottle = YARP.portableStruct()
-    YARP.bottleinit(bottle)
+    bottleinit(bottle)
     addstring(bottle, msg)
     bottle
 end
