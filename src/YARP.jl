@@ -9,7 +9,9 @@ export addstring, addint, adddouble
 export newstring, stringtoc, stringfromc, bottlestring
 
 const LIBYARP="libyarpc"
+
 include("YARP_h.jl")
+include("gazebo.jl")
 
 function encode(msg::AbstractString)
     a = '\0'
