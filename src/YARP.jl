@@ -12,7 +12,6 @@ export newstring, stringtoc, stringfromc, bottlestring
 const LIBYARP="libyarpc"
 
 include("YARP_h.jl")
-include("gazebo.jl")
 
 function encode(msg::AbstractString)
     a = '\0'
@@ -271,6 +270,8 @@ function bottlestring(bottle::portableStruct, result::yarpstring)
                 bottle, result)
     res < 0 ? error("Could not convert bottle to string") : res   
 end
+
+include("gazebo.jl")
 
 end ## module
 
