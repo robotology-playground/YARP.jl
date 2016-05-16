@@ -2,6 +2,7 @@ module gazebo
 
 using YARP
 
+
 "Helper for text bottle creation"
 function newbottle(msg::AbstractString)
     bottle = YARP.portableStruct()
@@ -10,12 +11,21 @@ function newbottle(msg::AbstractString)
     bottle
 end
 
+function newbottle(msgs::Array{Any,1})
+    bottle = YARP.portableStruct()
+    bottleinit(bottle)
+    [ addstring(bottle, msg) for msg in msgs ]
+    bottle
+end
+
 ## Create prapared output bottles, for faster sending
-const bottlerack = Dict(
+const bottlerack = Dict
+(
  "step" => newbottle("stepSimulation"),
  "stepAndWait" => newbottle("stepSimulationAndWait"),
  "reset" => newbottle("resetSimulationTime"),
- "pause" => newbottle("pauseSimulation")
+ "pause" => newbottle("pauseSimulation"),
+ "motionDone" => newbottle(["get", "mod"])
  ## FIXME: add missing
  ## TODO: convert to macro?
 )
@@ -119,21 +129,32 @@ function setposs(writer, values::Tuple{Float64})
     stringtoc(text)
 end
 
-function getenc(writer, jnt)
+function checkmotiondone(writer, jnt)
     text = YARP.newstring()
     input = YARP.portableStruct()
     YARP.bottleinit(input)
-    ## TODO: prepare output with a macro?
+    output = newbottle(["get", "mod"])
+    addint(output, jnt)
+    writewreplyport(writer, output, input)
+    bottlestring(input, text)
+    stringtoc(text) == "[ok]"
+end
+function setposs(writer, values::Tuple{Float64})
+    ## TODO: checkme
+    text = YARP.newstring()
+    input = YARP.portableStruct()
+    YARP.bottleinit(input)
     output = YARP.portableStruct()
     YARP.bottleinit(output)
-    addstring(output, "get")
-    addstring(output, "enc")
-    addint(output, jnt)
+    addstring(output, "set")
+    addstring(output, "poss")
+    for v in values
+        adddouble(output, v)
+    end
     writewreplyport(writer, output, input)
     bottlestring(input, text)
     stringtoc(text)
 end
-
 
 function help(writer)
     text = YARP.newstring()
